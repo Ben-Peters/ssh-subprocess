@@ -59,11 +59,11 @@ class Ssh(object):
         
     def _ssh_args(self, args):
         if isinstance(args, list):
-            sshargs = ['/usr/bin/ssh', '{self.host}'.format(self=self)]
-            sshargs += self.args + [ '-E', '/dev/null' ]
+            sshargs = ['ssh', '{self.host}'.format(self=self)]
+            sshargs += self.args + [ '-E', 'NUL' ]
             sshargs += [' '.join(args)]
         elif isinstance(args, str):
-            sshargs = '/usr/bin/ssh {strargs} {self.host} "{args}"'.format(
+            sshargs = 'ssh {strargs} {self.host} "{args}"'.format(
                 self=self, strargs=' '.join(self.args), args=args)
             
         logging.info(sshargs)
@@ -93,7 +93,7 @@ class Ssh(object):
         else:
             args = self.args
 
-        args = '/usr/bin/scp {args} "{localpath}" "{host}:{remotepath}" >/dev/null'.format(
+        args = 'scp {args} "{localpath}" "{host}:{remotepath}" > NUL'.format(
             host=self.host, args=' '.join(args), localpath=localpath, remotepath=remotepath)
         logging.info(args)
         return subprocess.call(args, shell=True)
@@ -105,7 +105,7 @@ class Ssh(object):
         else:
             args = self.args
 
-        args = '/usr/bin/scp {args} "{host}:{remotepath}" "{localpath}" >/dev/null'.format(
+        args = 'scp {args} "{host}:{remotepath}" "{localpath}" > NUL'.format(
             host=self.host, args=' '.join(args), localpath=localpath, remotepath=remotepath)
         logging.info(args)
         return subprocess.call(args, shell=True)
